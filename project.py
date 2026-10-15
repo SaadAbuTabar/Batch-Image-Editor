@@ -92,9 +92,8 @@ def automatic_crop(images, output_folder):
 
 
 def uniform_crop(images, output_folder):
-    first_image = Image.open(images[0])
-    top, bottom, left, right = find_borders(first_image)
-    first_image.close()
+    with Image.open(images[0]) as first_image:
+        top, bottom, left, right = find_borders(first_image)
 
     for image_path in images:
         with Image.open(image_path) as image:
@@ -122,13 +121,9 @@ def convert_images(images, output_folder, extension):
             output_path = output_folder / f"{image_path.stem}.{extension}"
 
             if extension == "jpg":
+                rgba_image = image.convert("RGBA")
                 background = Image.new("RGB", image.size, "white")
-
-                if image.mode == "RGBA":
-                    background.paste(image, mask=image.getchannel("A"))
-                else:
-                    background.paste(image)
-
+                background.paste(rgba_image, mask=rgba_image.getchannel("A"))
                 background.save(output_path)
 
             else:
