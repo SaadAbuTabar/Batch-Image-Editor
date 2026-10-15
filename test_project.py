@@ -76,7 +76,7 @@ def test_automatic_crop(tmp_path):
     output_folder.mkdir()
 
     image1 = Image.new("RGB", (10, 10), "black")
-    image2 = Image.new("RGB", (12, 12), "black")
+    image2 = Image.new("RGB", (12, 12), "gray")
 
     for y in range(2, 8):
         for x in range(3, 7):
@@ -108,7 +108,7 @@ def test_uniform_crop(tmp_path):
     output_folder.mkdir()
 
     image1 = Image.new("RGB", (10, 10), "black")
-    image2 = Image.new("RGB", (10, 10), "black")
+    image2 = Image.new("RGB", (10, 10), "gray")
 
     for y in range(2, 8):
         for x in range(3, 7):
@@ -123,3 +123,23 @@ def test_uniform_crop(tmp_path):
     for name in ("first.png", "second.png"):
         with Image.open(output_folder / name) as cropped:
             assert cropped.size == (4, 6)
+
+
+def test_find_borders_white():
+    image = Image.new("RGB", (10, 10), "white")
+
+    for x in range(2, 8):
+        for y in range(3, 7):
+            image.putpixel((x, y), (255, 0, 0))
+
+    assert find_borders(image) == (3, 7, 2, 8)
+
+
+def test_find_borders_black():
+    image = Image.new("RGB", (10, 10), "black")
+
+    for x in range(2, 8):
+        for y in range(3, 7):
+            image.putpixel((x, y), (255, 255, 255))
+
+    assert find_borders(image) == (3, 7, 2, 8)
