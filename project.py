@@ -137,57 +137,46 @@ def convert_images(images, output_folder, extension):
 
 def find_borders(image):
 
+    image = image.convert("RGB")
     width, height = image.size
+    background = image.getpixel((0, 0))
+    tolerance = 20
+
+    def same_color(pixel):
+        return all(abs(pixel[i] - background[i]) <= tolerance for i in range(3))
+
+    top = 0
+    bottom = height
+    left = 0
+    right = width
 
     for y in range(height):
-        black = True
-        for x in range(width):
-            pixel = image.getpixel((x, y))
-            r, g, b = pixel[:3]
-            if not (0 <= r <= 25 and 0 <= g <= 25 and 0 <= b <= 30):
-                black = False
-                break
-        if not black:
+        if not all(same_color(image.getpixel((x, y))) for x in range(width)):
             top = y
             break
+    else:
+        image.close()
+        return 0, height, 0, width
 
     for y in range(height - 1, -1, -1):
-        black = True
-        for x in range(width):
-            pixel = image.getpixel((x, y))
-            r, g, b = pixel[:3]
-            if not (0 <= r <= 25 and 0 <= g <= 25 and 0 <= b <= 30):
-                black = False
-                break
-        if not black:
+        if not all(same_color(image.getpixel((x, y))) for x in range(width)):
             bottom = y + 1
             break
 
     for x in range(width):
-        black = True
-        for y in range(height):
-            pixel = image.getpixel((x, y))
-            r, g, b = pixel[:3]
-            if not (0 <= r <= 25 and 0 <= g <= 25 and 0 <= b <= 30):
-                black = False
-                break
-        if not black:
+        if not all(same_color(image.getpixel((x, y))) for y in range(top, bottom)):
             left = x
             break
 
     for x in range(width - 1, -1, -1):
-        black = True
-        for y in range(height):
-            pixel = image.getpixel((x, y))
-            r, g, b = pixel[:3]
-            if not (0 <= r <= 25 and 0 <= g <= 25 and 0 <= b <= 30):
-                black = False
-                break
-        if not black:
+        if not all(same_color(image.getpixel((x, y))) for y in range(top, bottom)):
             right = x + 1
             break
 
+    image.close()
+
     return top, bottom, left, right
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     main()
