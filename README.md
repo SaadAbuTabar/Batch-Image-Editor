@@ -8,6 +8,10 @@
 **Location:** Irbid, Jordan  
 **Date:** October 15, 2026
 
+## Video
+
+[Watch the project demonstration on YouTube](https://youtu.be/CjHUuhPbMBs)
+
 ## Description
 
 Batch Image Editor is a Python script which makes image processing for multiple images in a folder. It relies on the Pillow library to crop, rotate, resize and convert images without necessarily changing the original images.
