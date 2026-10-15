@@ -1,5 +1,13 @@
 # Batch Image Editor
 
+**CS50’s Introduction to Programming with Python**
+
+**Author:** Saad Abu Tabar  
+**GitHub Username:** SaadAbuTabar  
+**edX Username:** saadabutabar  
+**Location:** Irbid, Jordan  
+**Date:** October 15, 2026
+
 ## Description
 
 Batch Image Editor is a Python script which makes image processing for multiple images in a folder. It relies on the Pillow library to crop, rotate, resize and convert images without necessarily changing the original images.
